@@ -49,7 +49,7 @@ export default class Character {
   }
 
   setStartingWeapon(charweapon: Weapon){
-    this.charweapon = Weapon;
+    this.charweapon = Weapon
   }
 
 }
