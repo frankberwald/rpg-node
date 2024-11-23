@@ -3,7 +3,7 @@ const prompt = require("prompt-sync")();
 import Weapon from "./src/classes/Weapon";
 import Character from "./src/classes/Character"
 
-const sword = new Weapon ("Greatsword", 15, "A very heavy sword")
+const sword = new Weapon("Greatsword", 15, "A very heavy sword")
 
 const swordName = sword.getName();
 const swordDamage = sword.getDamage();
@@ -28,3 +28,6 @@ console.log(`Name: ${character.getCharName()}`);
 console.log(`Class: ${character.getCharClass()}`);
 console.log(`Race: ${character.getCharRace()}`);
 console.log(`Gender: ${character.getCharGender()}`);
+console.log(`HP: ${character.getHealth()}`)
+
+const 
