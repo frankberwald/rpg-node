@@ -1,6 +1,7 @@
 import Weapon from "./src/classes/Weapon";
 import Character from "./src/classes/Character"
 import Enemy from "./src/classes/Enemy";
+import Boss from "./src/classes/Boss";
 import * as readlineSync from 'readline-sync';
 
 
@@ -118,13 +119,11 @@ function combat(player: Character, enemy: Enemy): boolean {
       isFighting = false;
       return false;;
     }
-    const continueFighting = readlineSync.keyInYNStrict('Does thou want to keep fighting?\n');
+    const continueFighting = readlineSync.keyInYNStrict('\nDoes thou want to keep fighting?\n');
     if (!continueFighting) {
       console.log("You decided to retreat!\n");
       isFighting = false;
       return false;
-    } else {
-      break;
     }
   }
 }
@@ -144,6 +143,7 @@ function mainFunction (){
   }
 
   let enemy = enemies[enemyChoice];
+
   console.log(`\nYou are now fighting ${enemy.getCharName()}`);
   while(true) {
     const won = combat(player, enemy);
@@ -158,6 +158,18 @@ function mainFunction (){
     if(!enemy) {
       console.log("\nCongratulations, thou has defeated all thy foes.");
       break;
+    }
+    if (Math.random() < 0.2) {
+      console.log("A powerful foe appears!");
+      enemy = new Boss({
+        name: enemy.getCharName(),
+        charClass: enemy.getCharClass(),
+        race: enemy.getCharRace(),
+        gender: enemy.getCharGender(),
+        healthpoints: enemy.getHealth(),
+        enemyPower: enemy.getPower(),
+        enemyWeapon: enemy.getStartingWeapon(),
+      });
     }
     console.log(`A new foe comes to battle you: ${enemy.getCharName()}\n`)
   }

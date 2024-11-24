@@ -1,13 +1,13 @@
 import Weapon from "./Weapon"
 
 export default class Character {
-  private charName: string = ''
-  private charClass: string = ''
-  private race: string = ''
-  private gender: string = ''
-  private hp: number = 1000
-  private power: number = 30
-  private weapon: Weapon | null = null
+  charName: string = ''
+  charClass: string = ''
+  race: string = ''
+  gender: string = ''
+  hp: number = 1000
+  power: number = 30
+  weapon: Weapon | null = null
 
   constructor(charName: string, charClass: string, race: string, gender: string) {
     this.charName = charName;
