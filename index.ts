@@ -72,53 +72,95 @@ function chooseCharacter(): Character {
 function attackEnemy(character: Character, enemy: Enemy): void {
   console.log(`${character.getCharName()} attacks ${enemy.getCharName()} with a ${character.getStartingWeapon()?.getName()}`);
   const totalDamage = character.getPower() + (character.getStartingWeapon()?.getDamage() || 0);
-  console.log(`${character.getCharName()} deals ${totalDamage} damage.`);
+  console.log(`${character.getCharName()} deals ${totalDamage} damage.\n`);
   enemy.setCharHealth(enemy.getHealth() - totalDamage);
   console.log(`${enemy.getCharName()} has ${enemy.getHealth()} health left.`);
 }
 
-function enemyAttack(character: Character, enemy: Enemy): void {
+function enemyAttack(player: Character, enemy: Enemy): void {
   const hitChance = Math.random();
   const isHit = hitChance <= 0.5;
 
   if (isHit) {
-    console.log(`${enemy.getCharName()} hits you with a ${enemy.getStartingWeapon()?.getName()}`);
-    const totalDamage = enemy.getPower() + (enemy.getStartingWeapon()?.getDamage() || 0)
+    console.log(`${enemy.getCharName()} hits you with a ${enemy.getStartingWeapon()?.getName()}\n`);
+    const totalDamage = enemy.getPower() + (enemy.getStartingWeapon()?.getDamage() || 0);
+    console.log(`${enemy.getCharName()} deals ${totalDamage} damage.\n`);
+    player.setCharHealth(player.getHealth() - totalDamage);
+  }else {
+    console.log(`${enemy.getCharName()} missed the attack\n`)
+  }
+  console.log(`You have ${player.getHealth()} health left\n`)
+}
+
+function getRandomEnemy(enemies: Enemy[]): Enemy | null {
+  const aliveEnemies = enemies.filter(e => e.getHealth() > 0);
+  if (aliveEnemies.length === 0) return null;
+  const randomIndex = Math.floor(Math.random() * aliveEnemies.length)
+  return aliveEnemies[randomIndex];
+}
+
+function combat(player: Character, enemy: Enemy): boolean {
+  let isFighting = true;
+
+  while (isFighting) {
+    attackEnemy(player, enemy);
+
+    if (enemy.getHealth() <= 0) {
+      console.log(`${enemy.getCharName()} has fallen.\n`)
+      isFighting = false;
+      return true;
+    }
+
+    enemyAttack(player, enemy)
+
+    if(player.getHealth() <= 0){
+      console.log(`${player.getCharName()} thou has perished. Game Over\n`)
+      isFighting = false;
+      return false;;
+    }
+    const continueFighting = readlineSync.keyInYNStrict('Does thou want to keep fighting?\n');
+    if (!continueFighting) {
+      console.log("You decided to retreat!\n");
+      isFighting = false;
+      return false;
+    } else {
+      break;
+    }
   }
 }
 
 function mainFunction (){
   const player = chooseCharacter();
-  console.log(`You have chosen ${player.getCharName()} who starts with a ${player.getStartingWeapon()?.getName()}.`);
+  console.log(`You have chosen ${player.getCharName()} who starts with a ${player.getStartingWeapon()?.getName()}.\n`);
+  const enemies = [trollBerserker, goblinScout, goblinWarrior, darkElfArcher, minotaur];
   const enemyChoice = readlineSync.keyInSelect(
-    [trollBerserker.getCharName(), goblinScout.getCharName(), goblinWarrior.getCharName(), darkElfArcher.getCharName(), minotaur.getCharName()],
-    "Choose your enemy"
+    enemies.map(e => e.getCharName()),
+    "Choose thy foe"
   );
 
-  let enemy: Enemy;
-  switch (enemyChoice) {
-    case 0:
-      enemy = trollBerserker;
-      break;
-    case 1:
-      enemy = goblinScout;
-      break;
-    case 2:
-      enemy = goblinWarrior;
-      break;
-    case 3:
-      enemy = darkElfArcher;
-      break;
-    case 4:
-      enemy = minotaur;
-      break;
-    default:
-      console.log("No enemy chosen, exiting...");
-      return;
+  if (enemyChoice === -1){
+    console.log("\nNo enemy chosen, therefore the game can not start")
+    return;
   }
 
-  console.log(`You are now fighting ${enemy.getCharName()}`);
-  attackEnemy(player, enemy);
+  let enemy = enemies[enemyChoice];
+  console.log(`\nYou are now fighting ${enemy.getCharName()}`);
+  while(true) {
+    const won = combat(player, enemy);
+
+    if(!won) {
+      console.log("\nThou has perished, game over")
+      break;
+    }
+
+    enemy = getRandomEnemy(enemies);
+
+    if(!enemy) {
+      console.log("\nCongratulations, thou has defeated all thy foes.");
+      break;
+    }
+    console.log(`A new foe comes to battle you: ${enemy.getCharName()}\n`)
+  }
 }
 
 mainFunction();
