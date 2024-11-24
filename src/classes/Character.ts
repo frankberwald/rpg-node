@@ -1,8 +1,13 @@
+import Weapon from "./Weapon"
+
 export default class Character {
   private charName: string = ''
   private charClass: string = ''
   private race: string = ''
   private gender: string = ''
+  private hp: number = 100
+  private power: number = 10
+  private weapon: Weapon | null = null
 
   constructor(charName: string, charClass: string, race: string, gender: string) {
     this.charName = charName;
@@ -15,6 +20,9 @@ export default class Character {
   getCharClass() { return this.charClass }
   getCharRace() { return this.race }
   getCharGender() { return this.gender }
+  getHealth() { return this.hp }
+  getPower() { return this.power }
+  getStartingWeapon(){return this.weapon}
 
   setName(charName: string) {
     this.charName = charName;
@@ -30,6 +38,18 @@ export default class Character {
 
   setCharGender(gender: string) {
     this.gender = gender;
+  }
+
+  setCharHealth(hp: number) {
+    this.hp = hp
+  }
+
+  setCharPower(power: number) {
+    this.power = power;
+  }
+
+  setStartingWeapon(charweapon: Weapon){
+    this.weapon = this.weapon
   }
 
 }
