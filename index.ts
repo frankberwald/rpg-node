@@ -36,11 +36,11 @@ console.log(`${berserker.getCharName()} starts with a ${berserker.getStartingWea
 // Inimigos
 
 
-const trollBerserker = new Enemy("Cave Troll", "Berserker", "Giant", "Male", 300, 20, mace)
-const goblinScout = new Enemy("Goblin, from the pits", "Scout", "Halfling", "Female", 80, 10, dagger)
-const goblinWarrior = new Enemy("Goblin from the pits", "Warrior", "Halfling", "Male", 100, 15, sword)
-const darkElfArcher = new Enemy("Dark-Elf from the dark woods", "Archer", "Elf", "Male", 120, 25, longbow)
-const minotaur = new Enemy("Minotaur, from the labyrinths", "Giant", "Giant", "Unknown", 500, 35, halberd)
+const trollBerserker = new Enemy("Cave Troll", "Berserker", "Giant", "Male", 450, 20, mace)
+const goblinScout = new Enemy("Goblin scout, from the pits", "Scout", "Halfling", "Female", 130, 10, dagger)
+const goblinWarrior = new Enemy("Goblin warrior from the pits", "Warrior", "Halfling", "Male", 180, 15, sword)
+const darkElfArcher = new Enemy("Dark-Elf from the dark woods", "Archer", "Elf", "Male", 300, 25, longbow)
+const minotaur = new Enemy("Minotaur, from the labyrinths", "Giant", "Giant", "Unknown", 700, 35, halberd)
 
 function chooseCharacter(): Character {
   console.log("Choose your character:");
@@ -75,6 +75,16 @@ function attackEnemy(character: Character, enemy: Enemy): void {
   console.log(`${character.getCharName()} deals ${totalDamage} damage.`);
   enemy.setCharHealth(enemy.getHealth() - totalDamage);
   console.log(`${enemy.getCharName()} has ${enemy.getHealth()} health left.`);
+}
+
+function enemyAttack(character: Character, enemy: Enemy): void {
+  const hitChance = Math.random();
+  const isHit = hitChance <= 0.5;
+
+  if (isHit) {
+    console.log(`${enemy.getCharName()} hits you with a ${enemy.getStartingWeapon()?.getName()}`);
+    const totalDamage = enemy.getPower() + (enemy.getStartingWeapon()?.getDamage() || 0)
+  }
 }
 
 function mainFunction (){
